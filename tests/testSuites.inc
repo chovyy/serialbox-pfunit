@@ -1,3 +1,1 @@
-ADD_TEST_SUITE(helloWorld_suite)
-ADD_TEST_SUITE(myTests_suite)
 ADD_TEST_SUITE(Fixture_mod_suite)
