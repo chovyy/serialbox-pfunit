@@ -1,53 +1,54 @@
-module m_serialbox_test
+MODULE m_serialbox_test
    
-   use ISO_FORTRAN_ENV
-   use pfunit_mod
-   
-   implicit none
-   public
+  USE ISO_FORTRAN_ENV
+  USE pfunit_mod
+  
+  IMPLICIT NONE
+  
+  PUBLIC 
 
-contains
+CONTAINS
 
 @Before
-   subroutine mySetup()
-      open(unit=10, file='testData.txt', form='formatted', access='sequential', status='new')
-      write(10,'(a)')'record 1'
-      write(10,'(a)')'record 2'
-      rewind(10)
-   end subroutine mySetup
+   SUBROUTINE mySetup()
+      OPEN(unit=10, file='testData.txt', form='formatted', access='sequential', status='new')
+      WRITE(10,'(a)')'record 1'
+      WRITE(10,'(a)')'record 2'
+      REWIND(10)
+   END SUBROUTINE mySetup
    
 @After
-   subroutine myTearDown()
-      close(10, status='delete')
-   end subroutine myTearDown
+   SUBROUTINE myTearDown()
+      CLOSE(10, status='delete')
+   END SUBROUTINE myTearDown
 
 @Test
-   subroutine testRead()
-      integer :: value
-      character(len=20) :: string
+   SUBROUTINE testRead()
+      INTEGER :: value
+      CHARACTER(len=20) :: string
       
-      read(10,'(a6,1x,i5)') string, value
+      READ(10,'(a6,1x,i5)') string, value
       @assertEqual(1, value)
       
-      read(10,'(a6,1x,i5)') string, value
+      READ(10,'(a6,1x,i5)') string, value
       @assertEqual(2, value)
       
-   end subroutine testRead
+   END SUBROUTINE testRead
 
 @Test
-   subroutine testEOF()
+   SUBROUTINE testEOF()
       integer :: value
       character(len=20) :: string
       integer :: eof
       
-      read(10,'(a6,1x,i5)') string, value
-      read(10,'(a6,1x,i5)') string, value
-      read(10,'(a6,1x,i5)', iostat=eof) string, value
+      READ(10,'(a6,1x,i5)') string, value
+      READ(10,'(a6,1x,i5)') string, value
+      READ(10,'(a6,1x,i5)', iostat=eof) string, value
       
       @assertEqual(IOSTAT_END, eof)
 
-   end subroutine testEOF
+   END SUBROUTINE testEOF
 
-end module m_serialbox_test
+END MODULE m_serialbox_test
 
 
