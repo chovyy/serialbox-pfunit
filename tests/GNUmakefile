@@ -1,4 +1,5 @@
 .PHONY: clean tests
+.PRECIOUS: %.F90
 ifneq ($(BASEMK_INCLUDED),YES)
 include $(PFUNIT)/include/base.mk
 endif
@@ -44,4 +45,4 @@ endif
 clean: local-E1-clean
 
 local-E1-clean:
-	$(RM) *$(OBJ_EXT) *.mod
+	$(RM) *$(OBJ_EXT) *.mod *.F90
