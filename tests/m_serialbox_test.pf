@@ -1,4 +1,4 @@
-module Fixture_mod
+module m_serialbox_test
    implicit none
    public
 
@@ -51,6 +51,6 @@ contains
 
    end subroutine testEOF
 
-end module Fixture_mod
+end module m_serialbox_test
 
 

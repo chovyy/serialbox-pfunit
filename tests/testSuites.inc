@@ -1,1 +1,1 @@
-ADD_TEST_SUITE(Fixture_mod_suite)
+ADD_TEST_SUITE(m_serialbox_test_suite)
