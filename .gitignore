@@ -5,6 +5,7 @@
 /driver.obj
 /tests.exe
 /tests.x
+/tests.xml
 
 /.project
 /.cproject
