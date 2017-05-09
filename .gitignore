@@ -5,3 +5,7 @@
 /driver.obj
 /tests.exe
 /tests.x
+
+/.project
+/.cproject
+/.settings/
