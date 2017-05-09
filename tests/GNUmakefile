@@ -26,9 +26,7 @@ endif
 
 tests: $(OBJS)
 
-testSuites.inc: $(SRCS)
-
-FFLAGS += -I$(SRC_DIR) -I$(PFUNIT)/mod $(SB_INCLUDE)
+FFLAGS += -I$(PFUNIT)/mod $(SB_INCLUDE)
 
 ifneq ($(UNAME),Windows)
 	ifeq ($(FC),nagfor)

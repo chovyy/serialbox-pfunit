@@ -1,13 +1,13 @@
 LIBROOT=/home/christian/lib
 PFUNIT=$(LIBROOT)/pfunit
-# Serialbox
-SERIALBOX=$(LIBROOT)/serialbox
-SB_INCLUDE=-I$(SERIALBOX)/include/fortran
-SB_LIBS=-L$(SERIALBOX)/lib -lFortranSer -lSerialBoxWrapper -lSerialBox -lUtils -ljson -lstdc++ -lsha256
-# Serialbox2
-#SERIALBOX=$(LIBROOT)/serialbox2
-#SB_INCLUDE=-I$(SERIALBOX)/include
-#SB_LIBS=-L$(SERIALBOX)/lib -lSerialboxCore -lSerialboxC -lSerialboxFortran -lstdc++
+## Serialbox
+#SERIALBOX=$(LIBROOT)/serialbox
+#SB_INCLUDE=-I$(SERIALBOX)/include/fortran
+#SB_LIBS=-L$(SERIALBOX)/lib -lFortranSer -lSerialBoxWrapper -lSerialBox -lUtils -ljson -lstdc++ -lsha256
+## Serialbox2
+SERIALBOX=$(LIBROOT)/serialbox2
+SB_INCLUDE=-I$(SERIALBOX)/include
+SB_LIBS=-L$(SERIALBOX)/lib -lSerialboxCore -lSerialboxC -lSerialboxFortran -lstdc++
 
 
 .PHONY: tests clean all
@@ -37,7 +37,7 @@ else
 	TEST_DIR=tests
 endif
 
-VPATH = . $(SRC_DIR) $(TEST_DIR)
+VPATH = . $(TEST_DIR)
 
 include $(PFUNIT)/include/base.mk
 
@@ -76,20 +76,18 @@ else
 endif
 
 SUT:
-	make -C $(SRC_DIR) SUT
 	make -C $(TEST_DIR) tests
 
 tests: all
 
-$(EXE): testSuites.inc add.F90 addComplex.F90 SUT
-	$(FC) -o $@ -I$(PFUNIT)/mod -I$(PFUNIT)/include -Itests $(PFUNIT)/include/driver.F90 $(TEST_DIR)/*$(OBJ_EXT) $(SRC_DIR)/*$(OBJ_EXT) $(LIBS) $(FFLAGS) $(FPPFLAGS)
+$(EXE): testSuites.inc SUT
+	$(FC) -o $@ -I$(PFUNIT)/mod -I$(PFUNIT)/include -Itests $(PFUNIT)/include/driver.F90 $(TEST_DIR)/*$(OBJ_EXT) $(LIBS) $(FFLAGS) $(FPPFLAGS)
 
 distclean: clean
 
 clean: local-E0-clean
 
 local-E0-clean:
-	make -C $(SRC_DIR) clean
 	make -C $(TEST_DIR) clean
 	rm -f $(EXE) *$(OBJ_EXT) tests.xml
 
@@ -100,7 +98,6 @@ endif
 export FC
 export FPPFLAGS
 export FFLAGS
-export SRC_DIR
 export TEST_DIR
 export OBJ_EXT
 export LIB_EXT
