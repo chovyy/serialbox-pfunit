@@ -8,55 +8,43 @@ MODULE m_serialbox_test
   
   PUBLIC 
 
-  TYPE(t_serializer) :: serializer
+  TYPE(t_savepoint)  :: savepoint
 
 CONTAINS
 
 @Before
    SUBROUTINE mySetup()
 
-      CALL fs_create_serializer("sb2", 'test', 'w', serializer)
+      CALL fs_create_savepoint('test', savepoint)
       
-      OPEN(unit=10, file='testData.txt', form='formatted', access='sequential', status='new')
-      WRITE(10,'(a)')'record 1'
-      WRITE(10,'(a)')'record 2'
-      REWIND(10)
    END SUBROUTINE mySetup
    
 @After
    SUBROUTINE myTearDown()
-      CLOSE(10, status='delete')
-      
-      CALL fs_destroy_serializer(serializer)
+
+      CALL fs_destroy_savepoint(savepoint)
       
    END SUBROUTINE myTearDown
-
+   
 @Test
-   SUBROUTINE testRead()
-      INTEGER :: value
-      CHARACTER(len=20) :: string
+    SUBROUTINE testSerializer()
+    
+      TYPE(t_serializer) :: serializer
+      INTEGER :: w_testfield_i1(5), r_testfield_i1(5)
       
-      READ(10,'(a6,1x,i5)') string, value
-      @assertEqual(1, value)
+      w_testfield_i1 = (/ 0, 1, 2, 3, 4 /)
+            
+      CALL fs_create_serializer("sbdata", 'test', 'w', serializer)
+      CALL fs_write_field(serializer, savepoint, "testfield_i1", w_testfield_i1)
+      CALL fs_destroy_serializer(serializer)
       
-      READ(10,'(a6,1x,i5)') string, value
-      @assertEqual(2, value)
+      CALL fs_create_serializer("sbdata", 'test', 'r', serializer)
+      CALL fs_read_field(serializer, savepoint, "testfield_i1", r_testfield_i1)
+      CALL fs_destroy_serializer(serializer)
       
-   END SUBROUTINE testRead
-
-@Test
-   SUBROUTINE testEOF()
-      integer :: value
-      character(len=20) :: string
-      integer :: eof
-      
-      READ(10,'(a6,1x,i5)') string, value
-      READ(10,'(a6,1x,i5)') string, value
-      READ(10,'(a6,1x,i5)', iostat=eof) string, value
-      
-      @assertEqual(IOSTAT_END, eof)
-
-   END SUBROUTINE testEOF
+      @assertEqual(w_testfield_i1, r_testfield_i1)
+    
+    END SUBROUTINE testSerializer
 
 END MODULE m_serialbox_test
 
