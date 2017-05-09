@@ -1,4 +1,8 @@
 module m_serialbox_test
+   
+   use ISO_FORTRAN_ENV
+   use pfunit_mod
+   
    implicit none
    public
 
@@ -6,7 +10,6 @@ contains
 
 @Before
    subroutine mySetup()
-      implicit none
       open(unit=10, file='testData.txt', form='formatted', access='sequential', status='new')
       write(10,'(a)')'record 1'
       write(10,'(a)')'record 2'
@@ -15,14 +18,11 @@ contains
    
 @After
    subroutine myTearDown()
-      implicit none
       close(10, status='delete')
    end subroutine myTearDown
 
 @Test
    subroutine testRead()
-      use pfunit_mod
-      implicit none
       integer :: value
       character(len=20) :: string
       
@@ -36,9 +36,6 @@ contains
 
 @Test
    subroutine testEOF()
-      use ISO_FORTRAN_ENV
-      use pfunit_mod
-      implicit none
       integer :: value
       character(len=20) :: string
       integer :: eof
