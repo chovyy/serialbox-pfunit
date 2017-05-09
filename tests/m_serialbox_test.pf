@@ -2,15 +2,21 @@ MODULE m_serialbox_test
    
   USE ISO_FORTRAN_ENV
   USE pfunit_mod
+  USE m_serialize
   
   IMPLICIT NONE
   
   PUBLIC 
 
+  TYPE(t_serializer) :: serializer
+
 CONTAINS
 
 @Before
    SUBROUTINE mySetup()
+
+      CALL fs_create_serializer("sb2", 'test', 'w', serializer)
+      
       OPEN(unit=10, file='testData.txt', form='formatted', access='sequential', status='new')
       WRITE(10,'(a)')'record 1'
       WRITE(10,'(a)')'record 2'
@@ -20,6 +26,9 @@ CONTAINS
 @After
    SUBROUTINE myTearDown()
       CLOSE(10, status='delete')
+      
+      CALL fs_destroy_serializer(serializer)
+      
    END SUBROUTINE myTearDown
 
 @Test

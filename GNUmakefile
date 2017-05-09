@@ -1,4 +1,8 @@
-PFUNIT=/home/christian/lib/pfunit
+LIBROOT=/home/christian/lib
+PFUNIT=$(LIBROOT)/pfunit
+SERIALBOX=$(LIBROOT)/serialbox2
+SB_INCLUDE=-I$(SERIALBOX)/lib/include
+SB_LIBS=-L$(SERIALBOX)/lib -lSerialboxCore -lSerialboxC -lSerialboxFortran -lstdc++
 
 .PHONY: tests clean all
 .DEFAULT_GOAL = tests
@@ -46,9 +50,9 @@ endif
 
 EXE = tests$(EXE_EXT)
 ifneq ($(UNAME),Windows)
-	LIBS = -L$(PFUNIT)/lib -lpfunit 
+	LIBS = -L$(PFUNIT)/lib -lpfunit $(SB_LIBS)
 else
-	LIBS = $(PFUNIT)/lib/libpfunit$(LIB_EXT)
+	LIBS = $(PFUNIT)/lib/libpfunit$(LIB_EXT) $(SB_LIBS)
 endif
 
 all: $(EXE)
@@ -95,4 +99,4 @@ export TEST_DIR
 export OBJ_EXT
 export LIB_EXT
 export EXE_EXT
-
+export SB_INCLUDE

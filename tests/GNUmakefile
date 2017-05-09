@@ -28,7 +28,7 @@ tests: $(OBJS)
 
 testSuites.inc: $(SRCS)
 
-FFLAGS += -I$(SRC_DIR) -I$(PFUNIT)/mod
+FFLAGS += -I$(SRC_DIR) -I$(PFUNIT)/mod $(SB_INLCUDE)
 
 ifneq ($(UNAME),Windows)
 	ifeq ($(FC),nagfor)
