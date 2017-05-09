@@ -1,8 +1,14 @@
 LIBROOT=/home/christian/lib
 PFUNIT=$(LIBROOT)/pfunit
-SERIALBOX=$(LIBROOT)/serialbox2
-SB_INCLUDE=-I$(SERIALBOX)/lib/include
-SB_LIBS=-L$(SERIALBOX)/lib -lSerialboxCore -lSerialboxC -lSerialboxFortran -lstdc++
+# Serialbox
+SERIALBOX=$(LIBROOT)/serialbox
+SB_INCLUDE=-I$(SERIALBOX)/include/fortran
+SB_LIBS=-L$(SERIALBOX)/lib -lFortranSer -lSerialBoxWrapper -lSerialBox -lUtils -ljson -lstdc++ -lsha256
+# Serialbox2
+#SERIALBOX=$(LIBROOT)/serialbox2
+#SB_INCLUDE=-I$(SERIALBOX)/include
+#SB_LIBS=-L$(SERIALBOX)/lib -lSerialboxCore -lSerialboxC -lSerialboxFortran -lstdc++
+
 
 .PHONY: tests clean all
 .DEFAULT_GOAL = tests
