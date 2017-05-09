@@ -1,3 +1,5 @@
+PFUNIT=/home/christian/lib/pfunit
+
 .PHONY: tests clean all
 .DEFAULT_GOAL = tests
 
