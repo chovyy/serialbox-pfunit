@@ -1,0 +1,1 @@
+ADD_TEST_SUITE(serialbox_test_suite)
