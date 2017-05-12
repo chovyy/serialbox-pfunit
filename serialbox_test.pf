@@ -9,13 +9,17 @@ MODULE serialbox_test
   PUBLIC 
 
   TYPE(t_savepoint)  :: savepoint
+  
+  CHARACTER(len=*), PARAMETER :: dir = 'sbdata'
+  CHARACTER(len=*), PARAMETER :: base_name = 'test'
+  CHARACTER(len=*), PARAMETER :: savepoint_name = 'test'
 
 CONTAINS
 
 @Before
    SUBROUTINE mySetup()
 
-      CALL fs_create_savepoint('test', savepoint)
+      CALL fs_create_savepoint(savepoint_name, savepoint)
       
    END SUBROUTINE mySetup
    
@@ -34,11 +38,11 @@ CONTAINS
       
       w_testfield_i1 = (/ 0, 1, 2, 3, 4 /)
             
-      CALL fs_create_serializer("sbdata", 'test', 'w', serializer)
+      CALL fs_create_serializer(dir, base_name, 'w', serializer)
       CALL fs_write_field(serializer, savepoint, "testfield_i1", w_testfield_i1)
       CALL fs_destroy_serializer(serializer)
       
-      CALL fs_create_serializer("sbdata", 'test', 'r', serializer)
+      CALL fs_create_serializer(dir, base_name, 'r', serializer)
       CALL fs_read_field(serializer, savepoint, "testfield_i1", r_testfield_i1)
       CALL fs_destroy_serializer(serializer)
       
