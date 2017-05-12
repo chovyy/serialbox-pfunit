@@ -5,7 +5,7 @@ PFUNIT=$(LIBROOT)/pfunit
 ## Serialbox
 SERIALBOX=$(LIBROOT)/serialbox
 SB_INCLUDE=-I$(SERIALBOX)/include/fortran
-SB_LIBS=-L$(SERIALBOX)/lib -lFortranSer -lSerialBoxWrapper -lSerialBox -lUtils -ljson -lstdc++ -lsha256
+SB_LIBS=-L$(SERIALBOX)/lib -lFortranSer -lSerialboxWrapper -lSerialbox -lUtils -ljson -lstdc++ -lsha256
 ## Serialbox2
 #SERIALBOX=$(LIBROOT)/serialbox2
 #SB_INCLUDE=-I$(SERIALBOX)/include
