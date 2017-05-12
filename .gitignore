@@ -2,7 +2,6 @@
 *.mod
 *.o
 /serialbox_test
-/tests.xml
 
 /.project
 /.cproject
