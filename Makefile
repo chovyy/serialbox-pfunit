@@ -28,10 +28,10 @@ all: $(TEST)
 $(TEST): testSuites.inc $(TEST).o 
 	$(FF) -o $@ $(FFLAGS) $(INCLUDE) -I$(DIR) $(PFUNIT)/include/driver.F90 $(TEST).o $(LIBS) $(FPPFLAGS)
 	
-$(TEST).o: $(TEST).F90
+%.o: %.F90
 	$(FF) -c $(FFLAGS) $(INCLUDE) $(FPPFLAGS) $<	
 	
-$(TEST).F90: $(TEST).pf
+%.F90: %.pf
 	$(PFUNIT)/bin/pFUnitParser.py $<  $@	
 	
 clean:
