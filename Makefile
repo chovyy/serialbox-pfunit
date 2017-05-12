@@ -18,7 +18,7 @@ FF=gfortran
 FFLAGS = -g -O0 -fbacktrace -fbounds-check -fcheck=mem
 FPPFLAGS = -DGNU -DBUILD_ROBUST
 LIBS = -L$(PFUNIT)/lib -lpfunit $(SB_LIBS)
-INCLUDE=-I$(PFUNIT)/mod -I$(PFUNIT)/include -I$(DIR) $(SB_INCLUDE)
+INCLUDE=-I$(PFUNIT)/mod -I$(PFUNIT)/include $(SB_INCLUDE)
 
 ######################################################
 
@@ -26,13 +26,13 @@ all: $(TEST)
 	./$(TEST)
 
 $(TEST): testSuites.inc $(TEST).o 
-	$(FF) -o $@ $(FFLAGS) $(FPPFLAGS) $(INCLUDE) $(PFUNIT)/include/driver.F90 $(TEST).o $(LIBS)
+	$(FF) -o $@ $(FFLAGS) $(INCLUDE) -I$(DIR) $(PFUNIT)/include/driver.F90 $(TEST).o $(LIBS) $(FPPFLAGS)
 	
-$(TEST).o: $(TEST).f90
-	$(FF) -c $(FFLAGS) $(FPPFLAGS) $(INCLUDE) $<	
+$(TEST).o: $(TEST).F90
+	$(FF) -c $(FFLAGS) $(INCLUDE) $(FPPFLAGS) $<	
 	
-$(TEST).f90: $(TEST).pf
+$(TEST).F90: $(TEST).pf
 	$(PFUNIT)/bin/pFUnitParser.py $<  $@	
 	
 clean:
-	rm -f $(TEST) *.o *.mod *.f90 sbdata/*
+	rm -f $(TEST) *.o *.mod *.F90 sbdata/*
