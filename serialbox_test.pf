@@ -95,19 +95,22 @@ CONTAINS
     SUBROUTINE testRank()
     
       TYPE(t_serializer) :: serializer
-      INTEGER :: w_testfield_i3(3,1,4)
-      INTEGER :: r_testfield_i3(3,1,4)
+      INTEGER :: w_testfield_i3(3,1,4), r_testfield_i3(3,1,4), w_testfield_i3_size(4), w_testfield_i3_bounds(4, 2)
       
       CHARACTER(len=*), PARAMETER :: base_name = 'test_rank'
       
       w_testfield_i3 = RESHAPE((/ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 /), SHAPE(w_testfield_i3))
+      w_testfield_i3_size = (/ 3, 1, 4, 1 /)
+      w_testfield_i3_bounds = RESHAPE((/ 1, 1, 1, 0, 3, 1, 4, 0 /), SHAPE(w_testfield_i3_bounds))
             
       CALL fs_create_serializer(dir, base_name, 'w', serializer)
-      CALL fs_write_field(serializer, savepoint, "testfield_i3", w_testfield_i3)
+      CALL fs_write_field(serializer, savepoint, "testfield_i3_rank", w_testfield_i3)
       CALL fs_destroy_serializer(serializer)
       
       CALL fs_create_serializer(dir, base_name, 'r', serializer)
-      @assertTrue(fs_field_exists(serializer, "testfield_i3"))
+      @assertTrue(fs_field_exists(serializer, "testfield_i3_rank"))
+      @assertEqual(w_testfield_i3_size, fs_get_field_size(serializer, "testfield_i3_rank"))
+      @assertEqual(w_testfield_i3_bounds, fs_get_field_bounds(serializer, "testfield_i3_rank"))
       CALL fs_read_field(serializer, savepoint, "testfield_i3", r_testfield_i3)
       CALL fs_destroy_serializer(serializer)
       
