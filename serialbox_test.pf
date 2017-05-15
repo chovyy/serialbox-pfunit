@@ -99,10 +99,10 @@ CONTAINS
       
       CHARACTER(len=*), PARAMETER :: base_name = 'test_rank'
       
-      w_testfield_i3 = RESHAPE((/ 0, 4, 8, 2, 6, 10, 1, 5, 9, 3, 7, 11 /), SHAPE(w_testfield_i3))
+      w_testfield_i3 = RESHAPE((/ 0, 4, 8, 1, 5, 9, 2, 6, 10, 3, 7, 11 /), SHAPE(w_testfield_i3))
       w_testfield_i3_size = (/ 3, 1, 4, 1 /)
       w_testfield_i3_bounds = RESHAPE((/ 1, 1, 1, 0, 3, 1, 4, 0 /), SHAPE(w_testfield_i3_bounds))
-            
+      
       CALL fs_create_serializer(dir, base_name, 'w', serializer)
       CALL fs_write_field(serializer, savepoint, "testfield_i3_rank", w_testfield_i3)
       CALL fs_destroy_serializer(serializer)
