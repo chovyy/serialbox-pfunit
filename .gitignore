@@ -7,4 +7,5 @@
 /.cproject
 /.settings/
 
-/sbdata/test*
+/sbdata/*.dat
+/sbdata/*.json
