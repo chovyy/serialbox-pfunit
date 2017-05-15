@@ -96,6 +96,9 @@ CONTAINS
     
       TYPE(t_serializer) :: serializer
       INTEGER :: w_testfield_i3(3,1,4), r_testfield_i3(3,1,4), w_testfield_i3_size(4), w_testfield_i3_bounds(4, 2)
+      INTEGER :: w_testfield_i4a(3,1,1,4), r_testfield_i4a(3,1,1,4), w_testfield_i4a_size(4), w_testfield_i4a_bounds(4, 2)
+      INTEGER :: w_testfield_i4b(1,3,2,2), r_testfield_i4b(1,3,2,2), w_testfield_i4b_size(4), w_testfield_i4b_bounds(4, 2)
+      INTEGER :: w_testfield_i4c(3,2,2,1), r_testfield_i4c(3,2,2,1), w_testfield_i4c_size(4), w_testfield_i4c_bounds(4, 2)
       
       CHARACTER(len=*), PARAMETER :: base_name = 'test_rank'
       
@@ -103,18 +106,54 @@ CONTAINS
       w_testfield_i3_size = (/ 3, 1, 4, 1 /)
       w_testfield_i3_bounds = RESHAPE((/ 1, 1, 1, 0, 3, 1, 4, 0 /), SHAPE(w_testfield_i3_bounds))
       
+      w_testfield_i4a = RESHAPE((/ 0, 4, 8, 1, 5, 9, 2, 6, 10, 3, 7, 11 /), SHAPE(w_testfield_i4a))
+      w_testfield_i4a_size = (/ 3, 1, 1, 4 /)
+      w_testfield_i4a_bounds = RESHAPE((/ 1, 1, 1, 1, 3, 1, 1, 4 /), SHAPE(w_testfield_i4a_bounds))
+      
+      w_testfield_i4b = RESHAPE((/ 0, 4, 8, 2, 6, 10, 1, 5, 9, 3, 7, 11 /), SHAPE(w_testfield_i4b))
+      w_testfield_i4b_size = (/ 1, 3, 2, 2 /)
+      w_testfield_i4b_bounds = RESHAPE((/ 1, 1, 1, 1, 1, 3, 2, 2 /), SHAPE(w_testfield_i4b_bounds))
+      
+      w_testfield_i4c = RESHAPE((/ 0, 4, 8, 2, 6, 10, 1, 5, 9, 3, 7, 11 /), SHAPE(w_testfield_i4c))
+      w_testfield_i4c_size = (/ 3, 2, 2, 1 /)
+      w_testfield_i4c_bounds = RESHAPE((/ 1, 1, 1, 1, 3, 2, 2, 1 /), SHAPE(w_testfield_i4c_bounds))
+      
       CALL fs_create_serializer(dir, base_name, 'w', serializer)
       CALL fs_write_field(serializer, savepoint, "testfield_i3_rank", w_testfield_i3)
+      CALL fs_write_field(serializer, savepoint, "testfield_i4a_rank", w_testfield_i4a)
+      CALL fs_write_field(serializer, savepoint, "testfield_i4b_rank", w_testfield_i4b)
+      CALL fs_write_field(serializer, savepoint, "testfield_i4c_rank", w_testfield_i4c)
       CALL fs_destroy_serializer(serializer)
       
       CALL fs_create_serializer(dir, base_name, 'r', serializer)
+
       @assertTrue(fs_field_exists(serializer, "testfield_i3_rank"))
       @assertEqual(w_testfield_i3_size, fs_get_field_size(serializer, "testfield_i3_rank"))
       @assertEqual(w_testfield_i3_bounds, fs_get_field_bounds(serializer, "testfield_i3_rank"))
-      CALL fs_read_field(serializer, savepoint, "testfield_i3", r_testfield_i3)
+
+      @assertTrue(fs_field_exists(serializer, "testfield_i4a_rank"))
+      @assertEqual(w_testfield_i4a_size, fs_get_field_size(serializer, "testfield_i4a_rank"))
+      @assertEqual(w_testfield_i4a_bounds, fs_get_field_bounds(serializer, "testfield_i4a_rank"))
+
+      @assertTrue(fs_field_exists(serializer, "testfield_i4b_rank"))
+      @assertEqual(w_testfield_i4b_size, fs_get_field_size(serializer, "testfield_i4b_rank"))
+      @assertEqual(w_testfield_i4b_bounds, fs_get_field_bounds(serializer, "testfield_i4b_rank"))
+
+      @assertTrue(fs_field_exists(serializer, "testfield_i4c_rank"))
+      @assertEqual(w_testfield_i4c_size, fs_get_field_size(serializer, "testfield_i4c_rank"))
+      @assertEqual(w_testfield_i4c_bounds, fs_get_field_bounds(serializer, "testfield_i4c_rank"))
+
+      CALL fs_read_field(serializer, savepoint, "testfield_i3_rank", r_testfield_i3)
+      CALL fs_read_field(serializer, savepoint, "testfield_i4a_rank", r_testfield_i4a)
+      CALL fs_read_field(serializer, savepoint, "testfield_i4b_rank", r_testfield_i4b)
+      CALL fs_read_field(serializer, savepoint, "testfield_i4c_rank", r_testfield_i4c)
+
       CALL fs_destroy_serializer(serializer)
       
       @assertEqual(w_testfield_i3, r_testfield_i3)
+      @assertEqual(w_testfield_i4a, r_testfield_i4a)
+      @assertEqual(w_testfield_i4b, r_testfield_i4b)
+      @assertEqual(w_testfield_i4c, r_testfield_i4c)
     
     END SUBROUTINE testRank
 
