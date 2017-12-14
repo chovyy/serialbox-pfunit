@@ -1,4 +1,5 @@
 .PHONY: clean all
+#.PRECIOUS: %.F90
 
 LIBROOT=/home/christian/lib
 PFUNIT=$(LIBROOT)/pfunit
