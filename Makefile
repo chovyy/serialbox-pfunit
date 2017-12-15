@@ -15,7 +15,7 @@ SB_LIBS=-L$(SERIALBOX)/lib -lFortranSer -lSerialboxWrapper -lSerialbox -lUtils -
 DIR=$(shell pwd)
 TEST=serialbox_test
 
-FF=gfortran
+FF=gfortran-6
 FFLAGS = -g -O0 -fbacktrace -fbounds-check -fcheck=mem
 FPPFLAGS = -DGNU -DBUILD_ROBUST
 LIBS = -L$(PFUNIT)/lib -lpfunit $(SB_LIBS)
