@@ -69,6 +69,45 @@ CONTAINS
     END SUBROUTINE testIntegerArrays
    
 @Test
+    SUBROUTINE testLongArrays()
+    
+      TYPE(t_serializer) :: serializer
+      INTEGER(KIND=8) :: w_testfield_l1(5), w_testfield_l2(4,3), w_testfield_l3(3,2,2), w_testfield_l4(2,2,2,2)
+      INTEGER(KIND=8) :: r_testfield_l1(5), r_testfield_l2(4,3), r_testfield_l3(3,2,2), r_testfield_l4(2,2,2,2)
+      
+      CHARACTER(len=*), PARAMETER :: base_name = 'test_long'
+      
+      w_testfield_l1 = (/ 0, 1, 2, 3, 4 /)
+      w_testfield_l2 = RESHAPE((/ 0, 3, 2, 9, 1, 4, 7, 10, 2, 5, 8, 11 /), SHAPE(w_testfield_l2))
+      w_testfield_l3 = RESHAPE((/ 0, 4, 8, 2, 6, 10, 1, 5, 9, 3, 7, 11 /), SHAPE(w_testfield_l3))
+      w_testfield_l4 = RESHAPE((/ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 /), SHAPE(w_testfield_l4))
+            
+      CALL fs_create_serializer(dir, base_name, 'w', serializer)
+      CALL fs_write_field(serializer, savepoint, "testfield_l1", w_testfield_l1)
+      CALL fs_write_field(serializer, savepoint, "testfield_l2", w_testfield_l2)
+      CALL fs_write_field(serializer, savepoint, "testfield_l3", w_testfield_l3)
+      CALL fs_write_field(serializer, savepoint, "testfield_l4", w_testfield_l4)
+      CALL fs_destroy_serializer(serializer)
+      
+      CALL fs_create_serializer(dir, base_name, 'r', serializer)
+      @assertTrue(fs_field_exists(serializer, "testfield_l1"))
+      @assertTrue(fs_field_exists(serializer, "testfield_l2"))
+      @assertTrue(fs_field_exists(serializer, "testfield_l3"))
+      @assertTrue(fs_field_exists(serializer, "testfield_l4"))
+      CALL fs_read_field(serializer, savepoint, "testfield_l1", r_testfield_l1)
+      CALL fs_read_field(serializer, savepoint, "testfield_l2", r_testfield_l2)
+      CALL fs_read_field(serializer, savepoint, "testfield_l3", r_testfield_l3)
+      CALL fs_read_field(serializer, savepoint, "testfield_l4", r_testfield_l4)
+      CALL fs_destroy_serializer(serializer)
+      
+      @assertEqual(w_testfield_l2, r_testfield_l2)
+      @assertEqual(w_testfield_l2, r_testfield_l2)
+      @assertEqual(w_testfield_l3, r_testfield_l3)
+      @assertEqual(w_testfield_l4, r_testfield_l4)
+    
+    END SUBROUTINE testLongArrays
+   
+@Test
     SUBROUTINE testScalars()
     
       TYPE(t_serializer) :: serializer
